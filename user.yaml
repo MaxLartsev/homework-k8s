@@ -1,0 +1,35 @@
+user:
+  admin: False
+  name: Max
+  age: 30
+  position: Analyst
+  skills:
+    - Lua:
+        level: 4
+        description: |
+          Владение основным синтаксисом
+          Умение использовать механизмы обработки ошибок
+          Знание основ оптимизации кода
+    - Python:
+        level: 2
+        description: |
+          Умение читать и писать простые программы
+          Создание и использование функций для организации кода
+          Понимание основных типов данных
+    - Docker:
+        level: 1
+        description: |
+          Понимание контейнеров и образов Docker
+          Умение создавать и использовать базовые образы
+          Возможность создавать и использовать Dockerfile для настройки образов
+  address:
+    country: Russia
+    city: Moscow
+    street: skip
+    number: 0
+    apartment: 0
+  pet:
+    name: Martin
+    breed: Sharpei
+    meow: False
+
