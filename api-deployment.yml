@@ -48,4 +48,4 @@ spec:
       volumes:
         - name: conv-api-data
           persistentVolumeClaim:
-            claimName: conv-api-pv
+            claimName: conv-api-pvc
