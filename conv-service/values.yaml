@@ -1,0 +1,34 @@
+app:
+  name: conv-app
+  image: antonlarichev/conv-app
+  version: "1.2"
+  port: 80
+  components: frontend
+  replicas: 1
+  limits:
+    memory: "512Mi"
+    cpu: "300m"
+  config:
+    name: app-config
+    data:
+      VITE_DOMAIN: ""
+  env:
+    name: VITE_DOMAIN
+
+api:
+  name: conv-api
+
+ingress:
+  name: myingress
+  host: conv.test
+  app:
+    path: "/"
+    port:
+      number: 80
+  api:
+    path: "/api"
+    port:
+      number: 3000
+  conv:
+    path: "/uploads"
+
