@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  annotations:
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+spec:
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ .Values.ingress.app.path }}
+        backend:
+          service:
+            name: {{ .Values.app.name }}-clusterip
+            port: {{ .Values.ingress.app.port | toYaml | nindent 14}}
+      - pathType: Prefix
+        path: {{ .Values.ingress.api.path }}
+        backend:
+          service:
+            name: {{ .Values.api.name }}-clusterip
+            port: {{ .Values.ingress.api.port | toYaml | nindent 14}}
+      - pathType: Prefix
+        path: {{ .Values.ingress.conv.path }}
+        backend:
+          service:
+            name: {{ .Values.api.name }}-clusterip
+            port: {{ .Values.ingress.api.port | toYaml | nindent 14}}
