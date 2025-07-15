@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+{{- with .Values.rabbitmq }}
+metadata: 
+  name: {{ .name }}-deployment
+spec:
+  {{- include "deploymentSpec.template" . | indent 2}}
+    spec:
+      containers:
+        {{- include "containerMetadata.template" . | indent 8}}
+          env:
+            {{- range .env}}
+            - name: {{ .name }}
+              valueFrom: 
+                secretKeyRef:
+                  name: {{ $.Values.secret.secretName }}
+                  key: {{ .key }}
+            {{- end }}
+          resources:
+            limits: {{ .limits | toYaml | nindent 14 }}
+          volumeMounts:
+            - name: {{ .name }}-data
+              mountPath: /var/lib/rabbitmq
+      volumes:
+        {{- include "volume.template" . | indent 8}}
+{{- end }}

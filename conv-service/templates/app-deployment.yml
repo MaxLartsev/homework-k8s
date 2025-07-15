@@ -1,27 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
+{{- with .Values.app }}
 metadata: 
-  name: {{ .Values.app.name }}-deployment
+  name: {{ .name }}-deployment
 spec:
-  replicas: {{ .Values.app.replicas }}
-  selector:
-    matchLabels:
-      components: {{ .Values.app.components }}
-  template:
-    metadata:
-      labels:
-        components: {{ .Values.app.components }}
+  {{- include "deploymentSpec.template" . | indent 2}}
     spec:
       containers:
-        - name: {{ .Values.app.name }}
-          image: "{{ .Values.app.image }}:{{ .Values.app.version }}"
-          ports:
-            - containerPort: {{ .Values.app.port }}
+        {{- include "containerMetadata.template" . | indent 8}}
           resources:
-            limits: {{ .Values.app.limits | toYaml | nindent 14 }}
+            limits: {{ .limits | toYaml | nindent 14 }}
           env:
-            - name: {{ .Values.app.env.name }}
+            - name: {{ .env.name }}
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Values.app.config.name }}
-                  key: {{ .Values.app.env.name }}
+                  name: {{ .config.name }}
+                  key: {{ .env.name }}
+{{- end }}

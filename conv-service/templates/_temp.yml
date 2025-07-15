@@ -1,0 +1,46 @@
+{{- define "service.template"}}
+metadata:
+  name: {{ .name }}-clusterip
+spec:
+  type: ClusterIP
+  ports:
+    - port:  {{ .port }}
+      protocol: "TCP"
+  selector:
+    components: {{ .components }}
+{{- end }}
+
+{{- define "volume.template" }}
+- name: {{ .name }}-data
+  persistentVolumeClaim:
+    claimName: {{ .name }}-pvc
+{{- end }}
+
+{{- define "containerMetadata.template" }}
+- name: {{ .name }}
+  image: "{{ .image }}:{{ .version }}"
+  ports:
+    - containerPort: {{ .port }}
+{{- end }}
+
+{{- define "deploymentSpec.template" }}
+replicas: {{ .replicas }}
+selector:
+  matchLabels:
+    components: {{ .components }}
+template:
+  metadata:
+    labels:
+      components: {{ .components }}
+{{- end }}
+
+{{- define "pvc.template" }}
+metadata:
+  name: {{ .name }}-pvc
+spec:
+  resources:
+    requests:
+      storage: {{ .pvc.storage }}
+  accessModes:
+    - {{ .pvc.accessMode }}
+{{- end }}
