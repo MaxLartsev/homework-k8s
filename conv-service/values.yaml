@@ -17,6 +17,70 @@ app:
 
 api:
   name: conv-api
+  image: antonlarichev/conv-api
+  version: "1.0"
+  port: 3000
+  components: backend
+  replicas: 1
+  limits:
+    memory: "512Mi"
+    cpu: "300m"
+  env:
+    - name: AMQP_EXCHANGE
+      key: AMQP_EXCHANGE
+    - name: AMQP_USER
+      key: SEED_USERNAME
+    - name: AMQP_PASSWORD
+      key: SEED_USER_PASSWORD
+    - name: AMQP_HOSTNAME
+      key: AMQP_HOSTNAME
+  pvc:
+    storage: 1Gi
+    accessMode: ReadWriteOnce
+
+conv:
+  name: conv-conv
+  image: antonlarichev/conv-service
+  version: "1.0"
+  port: 4000
+  components: converter
+  replicas: 1
+  limits:
+    memory: "512Mi"
+    cpu: "300m"
+  env:
+    - name: AMQP_EXCHANGE
+      key: AMQP_EXCHANGE
+    - name: AMQP_USER
+      key: SEED_USERNAME
+    - name: AMQP_PASSWORD
+      key: SEED_USER_PASSWORD
+    - name: AMQP_HOSTNAME
+      key: AMQP_HOSTNAME
+    - name: AMQP_QUEUE
+      key: AMQP_QUEUE
+  pvc:
+    storage: 1Gi
+    accessMode: ReadWriteOnce
+
+rabbitmq:
+  name: rabbitmq
+  image: rabbitmq
+  version: "3.8.34"
+  port: 5672
+  components: rabbitmq
+  replicas: 1
+  limits:
+    memory: "1Gi"
+    cpu: "300m"
+  env:
+    - name: RABBITMQ_DEFAULT_USER
+      key: SEED_USERNAME
+    - name: RABBITMQ_DEFAULT_PASS
+      key: SEED_USER_PASSWORD
+  pvc:
+    storage: 512Mi
+    accessMode: ReadWriteOnce
 
 ingress:
   name: myingress
@@ -32,3 +96,9 @@ ingress:
   conv:
     path: "/uploads"
 
+secret:
+  secretName: conv-secret
+  exchange: "test" 
+  user: "guest"
+  pass: "guest"
+  queue: "converter"
