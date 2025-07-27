@@ -13,7 +13,7 @@ spec:
             - name: {{ .name }}
               valueFrom: 
                 secretKeyRef:
-                  name: {{ $.Values.secret.secretName }}
+                  name: {{ $.Values.appName }}-secret
                   key: {{ .key }}
             {{- end }}
           resources:
