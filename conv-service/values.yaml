@@ -1,3 +1,5 @@
+appName: conv
+
 app:
   name: conv-app
   image: antonlarichev/conv-app
@@ -95,10 +97,3 @@ ingress:
       number: 3000
   conv:
     path: "/uploads"
-
-secret:
-  secretName: conv-secret
-  exchange: "test" 
-  user: "guest"
-  pass: "guest"
-  queue: "converter"
